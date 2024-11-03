@@ -3,6 +3,9 @@ import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
 import { GraphQLSchema, graphql, parse, validate } from 'graphql';
 import { queryRootType } from './types/query/root-query.js';
 import { mutationRootType } from './types/mutation/root-mutation.js';
+import depthLimit from 'graphql-depth-limit';
+
+const DEPTH_LIMIT = 5;
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.route({
@@ -20,7 +23,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const source = req.body.query;
       const variableValues = req.body.variables;
       const contextValue = {prisma: fastify.prisma};
-      const validateErrors = validate(schema, parse(source));
+      const validateErrors = validate(schema, parse(source), [depthLimit(DEPTH_LIMIT)]);
 
       if (validateErrors.length) {
         return {errors: validateErrors};
