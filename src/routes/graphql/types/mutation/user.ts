@@ -19,6 +19,11 @@ interface ChangeUser {
   }
 }
 
+interface Subscribe {
+  userId: string,
+  authorId: string
+}
+
 export const createUser = new GraphQLInputObjectType ({
   name: 'CreateUserInput',
   fields: () => ({
@@ -68,5 +73,35 @@ export const userMutationType = {
         return false
       }
     }
-  } 
+  },
+  subscribeTo: {
+    type: GraphQLBoolean,
+    args: {
+      userId: { type: new GraphQLNonNull(UUIDType) },
+      authorId: { type: new GraphQLNonNull(UUIDType) }
+    },
+    resolve: async (_obj, args: Subscribe, context: Context) => {
+      try {
+        await context.prisma.user.update({ where: { id: args.userId }, data: { userSubscribedTo: { create: { authorId: args.authorId } } } });
+        return true
+      } catch {
+        false
+      }
+    }
+  },
+    unsubscribeFrom: {
+    type: GraphQLBoolean,
+    args: {
+      userId: { type: new GraphQLNonNull(UUIDType) },
+      authorId: { type: new GraphQLNonNull(UUIDType) }
+    },
+    resolve: async (_obj, args: Subscribe, context: Context) => {
+      try {
+        await context.prisma.subscribersOnAuthors.delete({ where: { subscriberId_authorId: { subscriberId: args.userId, authorId: args.authorId } } });
+        return true
+      } catch {
+        return false
+      }
+    }
+  }
 }

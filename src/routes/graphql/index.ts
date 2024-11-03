@@ -14,6 +14,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         200: gqlResponseSchema,
       },
     },
+
     async handler(req) {
       const schema = new GraphQLSchema({query: queryRootType, mutation: mutationRootType});
       const source = req.body.query;
