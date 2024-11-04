@@ -4,7 +4,7 @@ import { GraphQLSchema, graphql, parse, validate } from 'graphql';
 import { queryRootType } from './types/query/root-query.js';
 import { mutationRootType } from './types/mutation/root-mutation.js';
 import depthLimit from 'graphql-depth-limit';
-import { getRootDataLoader } from './loaders/root-dataloader.js';
+import { getRootDataLoader } from './loaders/root.loader.js';
 
 const DEPTH_LIMIT = 5;
 
