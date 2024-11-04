@@ -27,13 +27,13 @@ export const userType = new GraphQLObjectType({
     subscribedToUser: {
       type: new GraphQLList(userType),
       resolve: async (obj: User, _args, context: Context) => {
-        return await context.prisma.user.findMany({ where: { userSubscribedTo: { some: { authorId: obj.id } } } })
+        return await context.subscribedToUserLoader.load(obj.id)
       }
     },
     userSubscribedTo: {
       type: new GraphQLList(userType),
       resolve: async (obj: User, _args, context: Context) => {
-        return await context.prisma.user.findMany({ where: { subscribedToUser: { some: { subscriberId: obj.id } } } })
+        return await context.userSubscribedToLoader.load(obj.id)
       }
     }
   })
