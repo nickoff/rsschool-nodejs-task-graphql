@@ -21,7 +21,7 @@ export const userType = new GraphQLObjectType({
     profile: {
       type: profileType as GraphQLObjectType,
       resolve: async (obj: User, _args, context: Context) => {
-        return await context.prisma.profile.findUnique({ where: { userId: obj.id } })
+        return await context.userProfileLoader.load(obj.id)
       }
     },
     subscribedToUser: {
