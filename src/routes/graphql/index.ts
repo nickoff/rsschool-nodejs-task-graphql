@@ -23,8 +23,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const schema = new GraphQLSchema({query: queryRootType, mutation: mutationRootType});
       const source = req.body.query;
       const variableValues = req.body.variables;
-      const dataloaders = getRootDataLoader(fastify.prisma);
-      const contextValue = {prisma: fastify.prisma, dataloaders};
+      const contextValue = {prisma: fastify.prisma, ...getRootDataLoader(fastify.prisma)};
       const validateErrors = validate(schema, parse(source), [depthLimit(DEPTH_LIMIT)]);
 
       if (validateErrors.length) {

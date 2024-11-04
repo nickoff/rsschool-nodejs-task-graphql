@@ -16,13 +16,13 @@ export const profileType = new GraphQLObjectType({
     user: {
       type: userType as GraphQLObjectType,
       resolve: async (obj: Profile, _args, context: Context) => {
-        return await context.prisma.user.findUnique({ where: { id: obj.userId } })
+        return await context.userLoader.load(obj.userId)
       }
     },
     memberType: {
       type: memberType as GraphQLObjectType,
       resolve: async (obj: Profile, _args, context: Context) => {
-        return await context.prisma.memberType.findUnique({ where: { id: obj.memberTypeId } })
+        return await context.memberTypeLoader.load(obj.memberTypeId)
       }
     }
   })
