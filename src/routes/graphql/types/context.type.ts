@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library.js";
+import { getRootDataLoader } from "../loaders/root-dataloader.js";
 
-export interface Context {
-  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
-}
+export type Context = {
+  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
+} & ReturnType<typeof getRootDataLoader>;
